@@ -1,0 +1,1 @@
+Follow AGENTS.md and SKILL.md in the repository root for all content work: bilingual Markdown posts under content/, front matter rules, SEO and polishing rules, and the publish workflow. Run `npm run check` before committing.

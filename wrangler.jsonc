@@ -1,0 +1,10 @@
+{
+  // Cloudflare 从 GitHub 导入本仓库时使用。name 必须和 Cloudflare 里的项目名一致。
+  "name": "uva-site",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}

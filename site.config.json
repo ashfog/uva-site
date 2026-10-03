@@ -1,0 +1,39 @@
+{
+  "siteUrl": "https://uva.xyz",
+  "siteName": "uva.xyz",
+  "defaultLang": "zh",
+  "name": "uva",
+  "email": "i@uva.xyz",
+  "avatar": "",
+  "booking": "",
+  "github": "",
+  "askAI": false,
+  "socials": { "GitHub": "https://github.com/ashfog", "X": "" },
+  "repo": "https://github.com/ashfog/uva-site",
+  "seo": {
+    "ogImage": "/og-default.png",
+    "twitter": "",
+    "verify": { "google": "", "bing": "", "baidu": "", "yandex": "" },
+    "indexNowKey": ""
+  },
+  "zh": {
+    "title": "uva.xyz — 一些小东西，慢慢成熟",
+    "description": "uva 是葡萄。这里是我写下来的、做出来的、收藏起来的小东西，慢慢成熟。",
+    "hi": "你好，我是 uva",
+    "tagline": ["一些小东西，", "慢慢成熟。"],
+    "journey": [
+      { "time": "2026 —", "org": "uva.xyz", "role": "独立开发者", "text": "把想到的东西，一颗一颗种出来。" },
+      { "time": "2024 — 2026", "org": "自由探索", "role": "自学与折腾", "text": "没有公司，也没有头衔：学东西、做小工具、写开源，把想法一个个做出来。" }
+    ]
+  },
+  "en": {
+    "title": "uva.xyz — Small things, slowly ripening",
+    "description": "uva means grape. Things I write, make and bookmark — small, and slowly ripening.",
+    "hi": "Hi, I'm uva",
+    "tagline": ["Small things,", "slowly ripening."],
+    "journey": [
+      { "time": "2026 —", "org": "uva.xyz", "role": "Independent developer", "text": "Planting ideas, one grape at a time." },
+      { "time": "2024 — 2026", "org": "On my own", "role": "Learning & tinkering", "text": "No company, no title — just learning, building small tools and open-source projects, one idea at a time." }
+    ]
+  }
+}

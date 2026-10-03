@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+{{HEAD}}
+<script>try{var s=localStorage,t=s.getItem('uva-theme');document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}catch(e){}</script>
+<style>
+:root{--bg:#fbfaf7;--fg:#18161d;--dim:#6f6a78;--line:rgba(24,22,29,.11);--acc:#5b2d91;color-scheme:light;--sans:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+[data-theme=dark]{--bg:#0c0b10;--fg:#ecebf1;--dim:#8f8a9b;--line:rgba(255,255,255,.1);--acc:#b9a0f2;color-scheme:dark}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--fg);font:17px/1.85 "Iowan Old Style","Palatino Linotype","Songti SC","Noto Serif CJK SC",Georgia,serif;padding:0 24px 70px;-webkit-font-smoothing:antialiased}
+a{color:inherit}.tools{position:fixed;top:14px;right:16px;display:flex;gap:2px}
+.tools a,.tools button{display:grid;place-items:center;min-width:36px;height:36px;border:0;border-radius:99px;background:none;color:var(--dim);font:600 12px var(--mono);cursor:pointer;text-decoration:none}.tools a:hover,.tools button:hover{background:var(--line);color:var(--fg)}
+main{max-width:660px;margin:0 auto}
+.crumb{font:12px var(--mono);letter-spacing:.04em;color:var(--dim);margin:30px 0 52px}.crumb a{text-decoration:none}.crumb a:hover{color:var(--acc)}.crumb span{margin:0 6px;opacity:.5}
+h1{font-weight:400;font-size:clamp(32px,6vw,50px);line-height:1.12;letter-spacing:-.02em}
+.meta{font:12px var(--mono);color:var(--dim);margin-top:14px}.meta a{color:var(--acc)}.tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;font:12px var(--mono);color:var(--acc)}
+.prose{margin-top:38px}.prose>*+*{margin-top:1.15em}.prose h2,.prose h3,.prose h4{font-weight:600;margin-top:2em;line-height:1.3}.prose a{color:var(--acc)}.prose img{max-width:100%;height:auto;border-radius:10px}
+blockquote{border-left:3px solid var(--acc);padding-left:16px;color:var(--dim)}code{font:14px var(--mono);background:var(--line);padding:1px 6px;border-radius:5px}
+pre{background:var(--line);padding:14px 16px;border-radius:10px;overflow:auto}pre code{background:none;padding:0}hr{border:0;border-top:1px solid var(--line)}
+table{border-collapse:collapse;width:100%;font-size:15px}th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.related{margin-top:80px;padding-top:22px;border-top:1px solid var(--line)}.related h2{font:400 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.related a{display:block;text-decoration:none;padding:12px 0;border-top:1px solid var(--line)}.related a:first-of-type{border-top:0}.related b{font-weight:500;font-size:18px}.related a:hover b{color:var(--acc)}
+.related p{font:14px/1.55 var(--sans);color:var(--dim)}
+footer{margin-top:70px;font:12px var(--mono);color:var(--dim);display:flex;gap:6px 20px;flex-wrap:wrap}footer a{text-decoration:none}footer a:hover{color:var(--acc)}
+</style></head><body>
+<div class="tools"><a id="lang" href="{{ALTHREF}}" hreflang="{{ALTHL}}" lang="{{ALTHL}}" aria-label="{{ALTARIA}}">{{ALTLABEL}}</a><button id="theme" aria-label="{{THEMEARIA}}">☾</button></div>
+<main>
+{{CRUMB}}
+<article>
+<header><h1>{{H1}}</h1>{{META}}{{TAGS}}</header>
+<div class="prose">{{BODY}}</div>
+</article>
+{{RELATED}}
+<footer><a href="{{HOME}}">{{HOMETXT}}</a><a href="{{RSS}}">RSS</a><span>{{COPY}}</span></footer>
+</main>
+<script>
+(()=>{const d=document.documentElement,b=document.getElementById('theme');const set=v=>{d.dataset.theme=v;try{localStorage.setItem('uva-theme',v)}catch(e){}b.textContent=v==='dark'?'☀':'☾'};
+set(d.dataset.theme||'light');b.onclick=()=>set(d.dataset.theme==='dark'?'light':'dark');
+document.getElementById('lang').onclick=()=>{try{localStorage.setItem('uva-lang','{{ALTCODE}}')}catch(e){}}})();
+</script></body></html>

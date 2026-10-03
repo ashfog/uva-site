@@ -1,0 +1,24 @@
+{
+  "name": "uva-site",
+  "version": "1.0.0",
+  "description": "Markdown 长出来的个人主页。往 `content/` 放一个 `.md`，推送后主页自动多一个链接；访客留言板跑在 Cloudflare 上。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.mjs",
+    "dev": "node build.mjs && npx wrangler pages dev dist",
+    "check": "node build.mjs",
+    "new": "node scripts/new.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "private": "true",
+  "type": "module",
+  "dependencies": {
+    "marked": "^18.0.14"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

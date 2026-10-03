@@ -1,0 +1,8 @@
+name = "uva"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "uva-guestbook"
+database_id = "把 wrangler d1 create 输出的 id 填在这里"
