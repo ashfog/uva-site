@@ -1,6 +1,6 @@
 ---
 title: ASHFOG, an AI auto-publishing blog
-date: 2026-10-01
+date: 2026-08-15
 updated: 2026-10-03
 summary: A blog with a built-in AI publishing workbench: give an AI a topic and permission, and it researches, writes, validates and publishes via GitHub and Cloudflare.
 tags: [Astro, AI, automation, Cloudflare]

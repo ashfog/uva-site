@@ -1,6 +1,6 @@
 ---
 title: AI 自动化发布博客 ASHFOG
-date: 2026-10-01
+date: 2026-08-15
 updated: 2026-10-03
 summary: ASHFOG 是一个内置 AI 发布工作台的博客：给 AI 一个主题并授权，它就能调研、写作、校验，提交到 GitHub 并交给 Cloudflare 部署。
 tags: [Astro, AI, 自动化, Cloudflare]
