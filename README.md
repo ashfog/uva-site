@@ -176,6 +176,10 @@ Poke the grape mark · type `wine` on the keyboard · switch tabs and watch the 
 
 A Cloudflare Functions + D1 guestbook backend exists in `extras/guestbook/`; it is not wired into the homepage at the moment.
 
+## Credits
+
+Display typeface for English pages: [Instrument Serif](https://github.com/Instrument/instrument-serif) (SIL Open Font License 1.1), self-hosted in `public/fonts/`.
+
 ## License
 
 [MIT](LICENSE)

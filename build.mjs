@@ -43,7 +43,7 @@ const secLabel=(k,L)=>(cfg.sections&&cfg.sections[k]&&cfg.sections[k][L])||UI[L]
 /* ---------- markdown：标题降一级（页面只留一个 h1）、标题带锚点、外链加 rel、图片懒加载 ---------- */
 const slugify=s=>String(s).replace(/<[^>]*>/g,'').toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g,'-').replace(/^-|-$/g,'')||'section';
 marked.use({renderer:{
- heading(a,b){const tk=typeof a==='object',depth=tk?a.depth:b,text=tk?this.parser.parseInline(a.tokens):a,d=Math.min(6,depth+1);return `<h${d} id="${slugify(text)}">${text}</h${d}>\n`},
+ heading(a,b){const tk=typeof a==='object',depth=tk?a.depth:b,text=tk?this.parser.parseInline(a.tokens):a,d=Math.min(6,depth+1);const id=slugify(text);return `<h${d} id="${id}">${text}<a class="anchor" href="#${id}" aria-label="Link to this section"></a></h${d}>\n`},
  link(a,b,c){const tk=typeof a==='object',href=tk?a.href:a,title=tk?a.title:b,text=tk?this.parser.parseInline(a.tokens):c,ext=/^https?:/i.test(href);
   return `<a href="${esc(href)}"${title?` title="${esc(title)}"`:''}${ext?' rel="noopener" target="_blank"':''}>${text}</a>`},
  image(a,b,c){const tk=typeof a==='object',href=tk?a.href:a,title=tk?a.title:b,text=tk?a.text:c;
@@ -145,11 +145,16 @@ function head(o){
 function markHTML(){
   if(cfg.avatar)return `<img id="mark" src="${esc(cfg.avatar)}" alt="${esc(AUTHOR)}" width="84" height="84">`;
   const rows=[[13.1,25.7,38.3,50.9],[19.4,32,44.6],[25.7,38.3],[32]],op=[.62,.76,.88,1];
-  let h=`<svg id="mark" viewBox="0 0 64 64" role="img" aria-label="${esc(NAME)}"><path d="M32 17.5C32 11.5 34 8 37 6" stroke="var(--g)" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M36.5 8C37 3 43 1 50 2.5c0 5.5-5 9-13.5 5.5z" fill="var(--g)"/>`;
+  let h=`<svg id="mark" viewBox="0 0 64 64" role="img" aria-label="${esc(NAME)}"><defs><radialGradient id="gs" cx=".34" cy=".3" r=".78"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></radialGradient></defs>`+
+   `<path d="M32 17.5C32 11.5 34 8 37 6" stroke="var(--g)" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M36.5 8C37 3 43 1 50 2.5c0 5.5-5 9-13.5 5.5z" fill="var(--g)"/><path d="M38 7.2C42 6 46 4.6 49 3.2" stroke="#fff" stroke-opacity=".55" stroke-width=".7" fill="none" stroke-linecap="round"/>`;
   rows.forEach((r,i)=>r.forEach((x,j)=>{const y=+(23+i*10.9).toFixed(1),k=(1+i*.35+((i*7+j*3)%10)/33).toFixed(2);
-    h+=`<g class="g" data-x="${x}" data-y="${y}" data-k="${k}"><circle cx="${x}" cy="${y}" r="6" fill="var(--acc)" opacity="${op[i]}"/><circle cx="${+(x-2.3).toFixed(1)}" cy="${+(y-2.5).toFixed(1)}" r="1.6" fill="#fff" opacity=".45"/></g>`}));
+    h+=`<g class="g" data-x="${x}" data-y="${y}" data-k="${k}"><circle cx="${x}" cy="${y}" r="6" fill="var(--acc)" opacity="${op[i]}"/><circle cx="${x}" cy="${y}" r="6" fill="url(#gs)"/><circle cx="${+(x-2.3).toFixed(1)}" cy="${+(y-2.5).toFixed(1)}" r="1.5" fill="#fff" opacity=".6"/></g>`}));
   return h+'</svg>';
 }
+const FACE=`@font-face{font-family:"Instrument Serif";src:url(/fonts/instrument-serif-latin-400-normal.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Instrument Serif";src:url(/fonts/instrument-serif-latin-400-italic.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+`;
+const FONTCSS=l=>l==='en'?FACE:'';
 const tpHome=readFileSync('src/index.html','utf8'),tpPost=readFileSync('src/post.html','utf8');
 const lastmodAll=posts.reduce((m,p)=>p.updated>m?p.updated:m,'0000')||today;
 
@@ -163,7 +168,7 @@ function homePage(L){
   const keys=[...['projects','writing','links'].filter(k=>g[k]),...Object.keys(g).filter(k=>!['projects','writing','links'].includes(k))];
   const row=(p,i)=>{const x=p.i[L],ext=!!x.url,href=ext?x.url:p.path[L];
     const fb=x.fb?`<em class="fb" lang="${HL[x.fb]}">${x.fb==='en'?'EN':'中'}</em>`:'';
-    return `<a class="row" href="${esc(href)}"${ext?' target="_blank" rel="noopener"':''}${x.fb?` hreflang="${HL[x.fb]}"`:''} data-i="${i}"><i class="dot" data-d="${p.date}" style="background:${ripe(p.date)}"></i><span class="t">${esc(x.title)}${ext?' <em>↗</em>':''}${fb}</span><time datetime="${p.date}">${p.date}</time><span class="d">${esc(x.summary)}</span></a>`};
+    return `<a class="row" href="${esc(href)}"${ext?' target="_blank" rel="noopener"':''}${x.fb?` hreflang="${HL[x.fb]}"`:''} data-i="${i}"><i class="dot" data-d="${p.date}" style="background:${ripe(p.date)}"></i><span class="t"${ext?'':` style="view-transition-name:vt-${p.slug}"`}>${esc(x.title)}${ext?' <em>↗</em>':''}${fb}</span><time datetime="${p.date}">${p.date}</time><span class="d">${esc(x.summary)}</span></a>`};
   let secs=posts.length?'':`<div class="sec"><p class="empty">${esc(u.empty)}</p></div>`;
   keys.forEach((k,n)=>{secs+=`<section class="sec" id="${esc(k)}"><h2 class="lb"><span>${esc(secLabel(k,L))}</span></h2>${n===0?`<p class="legend"><i class="dot" style="background:hsl(96 48% 58%)"></i>${u.lg1}<i class="dot" style="background:hsl(275 42% 42%);margin-left:8px"></i>${u.lg2}</p>`:''}${g[k].map(([p,i])=>row(p,i)).join('')}</section>`});
   const J=c.journey||[],jr=J.length?`<section class="sec" id="journey"><h2 class="lb"><span>${u.jr}</span></h2>${J.map(j=>`<div class="jr"><span class="m">${esc(j.time||'')}</span><div><b>${j.url?`<a href="${esc(j.url)}" target="_blank" rel="noopener">${esc(j.org)} ↗</a>`:esc(j.org)}</b> <span>· ${esc(j.role||'')}</span></div>${j.text?`<p>${esc(j.text)}</p>`:''}</div>`).join('')}</section>`:'';
@@ -174,7 +179,8 @@ function homePage(L){
     {'@type':'WebSite','@id':abs('/')+'#website','url':abs(homePath(L)),'name':NAME,'description':desc,'inLanguage':HL[L],'publisher':{'@id':abs('/')+'#person'}},
     {'@type':'Person','@id':abs('/')+'#person','name':AUTHOR,'url':abs(homePath(L)),'sameAs':Object.values(cfg.socials||{}).filter(Boolean),...(cfg.avatar?{image:abs(cfg.avatar)}:{})},
     {'@type':'CollectionPage','@id':abs(homePath(L))+'#posts','url':abs(homePath(L)),'name':title,'inLanguage':HL[L],'mainEntity':{'@type':'ItemList','itemListElement':posts.filter(p=>p.path[L]||p.i[L].url).map((p,i)=>({'@type':'ListItem','position':i+1,'url':abs(p.i[L].url||p.path[L]),'name':p.i[L].title}))}}]};
-  const html=fill(tpHome,{LANG:HL[L],CODE:L,HEAD:head({L,title,desc,path:homePath(L),img:imgFor(null),alts,xdef:homePath(DEF),ld}),
+  const PRE=l=>l==='en'?'<link rel="preload" href="/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>\n<link rel="preload" href="/fonts/instrument-serif-latin-400-italic.woff2" as="font" type="font/woff2" crossorigin>':'';
+  const html=fill(tpHome,{FONTCSS:FONTCSS(L),PRELOAD:PRE(L),LANG:HL[L],CODE:L,HEAD:head({L,title,desc,path:homePath(L),img:imgFor(null),alts,xdef:homePath(DEF),ld}),
     HOST:SITE?new URL(SITE).hostname:'',ALTHOME:homePath(O2),ALTHL:HL[O2],ALTLABEL:u.altLabel,ALTARIA:u.altAria,THEMEARIA:u.themeAria,LINKSARIA:u.linksAria,MARK:markHTML(),
     HI:esc(c.hi||''),H1:`${esc(tg[0])}<br><em>${esc(tg[1]||'')}</em>`,BIO:bio,LINKS:links,SECS:secs,JR:jr,GH:esc(cfg.github||''),
     COPY:`© ${new Date().getFullYear()} ${esc(AUTHOR)}`,RSS:prefix(L)+'/rss.xml',REPO:esc(cfg.repo||'#'),TIP:esc(u.tip),
@@ -197,7 +203,7 @@ function postPage(p,L){
      'author':{'@type':'Person','name':AUTHOR,'url':abs(homePath(L))},'publisher':{'@type':'Person','name':AUTHOR,'url':abs(homePath(L))},'isPartOf':{'@id':abs('/')+'#website'}},
     {'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':1,'name':u.home,'item':abs(homeL)},{'@type':'ListItem','position':2,'name':sec,'item':abs(homeL+'#'+p.section)},{'@type':'ListItem','position':3,'name':x.title,'item':abs(path)}]}]};
   const crumb=`<nav class="crumb" aria-label="Breadcrumb"><a href="${homeL}">${u.home}</a><span>/</span><a href="${homeL}#${esc(p.section)}">${esc(sec)}</a></nav>`;
-  const html=fill(tpPost,{LANG:HL[L],HEAD:head({L,title:titleTag,desc:x.summary,path,type:'article',img,alts,xdef:both?postPath(DEF,p.slug):undefined,ld,pub:p.date,mod:p.updated,tags:x.tags}),
+  const html=fill(tpPost,{FONTCSS:FONTCSS(L),PRELOAD:L==='en'?'<link rel="preload" href="/fonts/instrument-serif-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>':'',VT:` style="view-transition-name:vt-${p.slug}"`,LANG:HL[L],HEAD:head({L,title:titleTag,desc:x.summary,path,type:'article',img,alts,xdef:both?postPath(DEF,p.slug):undefined,ld,pub:p.date,mod:p.updated,tags:x.tags}),
     ALTHREF:p.page[O2]?postPath(O2,p.slug):homePath(O2),ALTHL:HL[O2],ALTLABEL:u.altLabel,ALTARIA:u.altAria,ALTCODE:O2,THEMEARIA:u.themeAria,CRUMB:crumb,H1:esc(x.title),META:meta,
     TAGS:x.tags.length?`<p class="tags">${x.tags.map(t=>`<span>#${esc(t)}</span>`).join('')}</p>`:'',BODY:marked.parse(p.body[L]),RELATED:related,HOME:homeL,HOMETXT:'← '+u.home,RSS:prefix(L)+'/rss.xml',COPY:`© ${new Date().getFullYear()} ${esc(AUTHOR)}`});
   write(path.slice(1)+'index.html',html);
@@ -207,7 +213,7 @@ for(const L of LANGS)homePage(L);
 for(const p of posts)for(const L of LANGS)if(p.page[L])postPage(p,L);
 
 /* ---------- 404 ---------- */
-{const L=DEF,u=UI[L];write('404.html',fill(tpPost,{LANG:HL[L],HEAD:head({L,title:`${u.nf} — ${NAME}`,desc:u.nfText,path:'/404.html',img:null,noindex:true}),
+{const L=DEF,u=UI[L];write('404.html',fill(tpPost,{FONTCSS:FONTCSS(L),PRELOAD:'',VT:'',LANG:HL[L],HEAD:head({L,title:`${u.nf} — ${NAME}`,desc:u.nfText,path:'/404.html',img:null,noindex:true}),
   ALTHREF:homePath(OTHER(L)),ALTHL:HL[OTHER(L)],ALTLABEL:u.altLabel,ALTARIA:u.altAria,ALTCODE:OTHER(L),THEMEARIA:u.themeAria,CRUMB:'',H1:esc(u.nf),META:'',TAGS:'',
   BODY:`<p>${esc(u.nfText)}</p><p><a href="${homePath(L)}">← ${u.home}</a></p>`,RELATED:'',HOME:homePath(L),HOMETXT:'← '+u.home,RSS:prefix(L)+'/rss.xml',COPY:`© ${new Date().getFullYear()} ${esc(AUTHOR)}`}))}
 
@@ -224,7 +230,7 @@ for(const L of LANGS){const c=cfg[L]||{},items=posts.filter(p=>p.page[L]);
   items.map(p=>`<item><title>${xe(p.i[L].title)}</title><link>${xe(abs(p.path[L]))}</link><guid isPermaLink="true">${xe(abs(p.path[L]))}</guid><pubDate>${rfc822(p.date)}</pubDate><description>${xe(p.i[L].summary)}</description>${p.i[L].tags.map(t=>`<category>${xe(t)}</category>`).join('')}</item>`).join('\n')+`\n</channel></rss>\n`)}
 write('llms.txt',`# ${NAME}\n\n> ${(cfg[DEF]&&cfg[DEF].description)||''}\n\n`+LANGS.map(L=>`## ${L==='zh'?'中文':'English'}（${abs(homePath(L))}）\n\n`+
   [...new Set(posts.map(p=>p.section))].map(k=>{const items=posts.filter(p=>p.section===k&&(p.path[L]||p.i[L].url));return items.length?`### ${secLabel(k,L)}\n`+items.map(p=>`- [${p.i[L].title}](${abs(p.i[L].url||p.path[L])}): ${p.i[L].summary}`).join('\n')+'\n':''}).join('\n')).join('\n'));
-write('_headers',`/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n`);
+write('_headers',`/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n  X-Frame-Options: SAMEORIGIN\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/fonts/*\n  Cache-Control: public, max-age=31536000, immutable\n`);
 
 /* ---------- 发布后自检 ---------- */
 const files=[];(function w(d){for(const e of readdirSync(d,{withFileTypes:true}))e.isDirectory()?w(join(d,e.name)):files.push(join(d,e.name))})(O);

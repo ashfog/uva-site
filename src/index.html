@@ -4,10 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 {{HEAD}}
+{{PRELOAD}}
 <script>try{var s=localStorage,p=s.getItem('uva-lang'),t=s.getItem('uva-theme');document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');var h=location.hostname,H='{{HOST}}';if((p==='zh'||p==='en')&&p!=='{{CODE}}'&&(!H||h===H||h==='www.'+H||h==='localhost'||h==='127.0.0.1'||/\.(pages|workers)\.dev$/.test(h)))location.replace('{{ALTHOME}}'+location.hash)}catch(e){}</script>
 <style>
+{{FONTCSS}}
 :root{--bg:#fbfaf7;--fg:#18161d;--dim:#6f6a78;--line:rgba(24,22,29,.11);--acc:#5b2d91;--g:#5f9b4a;--card:#fff;color-scheme:light;
 --serif:"Iowan Old Style","Palatino Linotype","Songti SC","Source Han Serif SC","Noto Serif CJK SC",Georgia,serif;
+--display:"Instrument Serif","Iowan Old Style","Palatino Linotype","Songti SC","Source Han Serif SC","Noto Serif CJK SC",Georgia,serif;
 --sans:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
 [data-theme=dark]{--bg:#0c0b10;--fg:#ecebf1;--dim:#8f8a9b;--line:rgba(255,255,255,.1);--acc:#b9a0f2;--g:#8fd07a;--card:#16141c;color-scheme:dark}
 html.aged{--bg:#241016;--fg:#f6e3dc;--dim:#b58a8a;--line:rgba(246,227,220,.16);--acc:#ff7a8e;--card:#321820}
@@ -21,8 +24,10 @@ a{color:inherit;text-decoration:none}
 #mark{display:block;width:84px;height:84px;overflow:visible;cursor:pointer;touch-action:manipulation}
 img#mark{border-radius:50%;object-fit:cover}
 .hi{font:12px var(--mono);letter-spacing:.06em;color:var(--dim);margin:34px 0 12px}
-h1{font:400 clamp(34px,6.4vw,54px)/1.08 var(--serif);letter-spacing:-.025em}
+h1{font:400 clamp(36px,6.6vw,56px)/1.1 var(--display);letter-spacing:-.02em;text-wrap:balance;font-synthesis:none}
+html[lang=en] h1{font-size:clamp(48px,9.4vw,84px);line-height:1;letter-spacing:-.028em}
 h1 em{font-style:italic;color:var(--acc)}
+.bio,.row .d{text-wrap:pretty}h2{text-wrap:balance}
 .bio{margin-top:28px;color:var(--dim);font-size:17px;line-height:1.85}.bio p+p{margin-top:1em}.bio strong{color:var(--fg);font-weight:600}
 .bio a{color:var(--fg);border-bottom:1px solid var(--line);white-space:nowrap;transition:.2s}.bio a:hover{color:var(--acc);border-color:var(--acc)}
 .bio a img{width:15px;height:15px;box-sizing:content-box;padding:1.5px;background:#fff;border-radius:5px;vertical-align:-4px;margin-right:6px}
@@ -55,7 +60,20 @@ footer a:hover{color:var(--acc)}footer .r{opacity:.75}
 .tg{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}.tg span{font:11px var(--mono);color:var(--acc)}
 #say{position:fixed;left:50%;bottom:28px;z-index:70;transform:translate(-50%,8px);background:var(--fg);color:var(--bg);font-size:13px;padding:7px 15px;border-radius:99px;opacity:0;transition:.3s;pointer-events:none;white-space:nowrap}#say.on{opacity:1;transform:translate(-50%,0)}
 @media(max-width:560px){.row{grid-template-columns:20px 1fr}.row time{grid-column:2;grid-row:auto;margin-top:2px}.jr{grid-template-columns:1fr}.jr p{grid-column:1}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:no-preference){
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+@keyframes sway{0%,100%{transform:rotate(-1.8deg)}50%{transform:rotate(1.8deg)}}
+#mark{transform-origin:50% 14%;animation:rise .9s cubic-bezier(.2,.7,.2,1) both,sway 7s ease-in-out .9s infinite}
+.hi,h1,.bio,.links{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.hi{animation-delay:.12s}h1{animation-delay:.2s}.bio{animation-delay:.34s}.links{animation-delay:.46s}
+@supports (animation-timeline:view()){.sec,footer{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 45%}}
+}
+@media (prefers-reduced-motion:no-preference){@view-transition{navigation:auto}
+::view-transition-group(*){animation-duration:.42s;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.3s}}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:3px}
+::selection{background:color-mix(in srgb,var(--acc) 30%,transparent)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>

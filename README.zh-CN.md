@@ -176,6 +176,10 @@ slug: custom-slug              # 自定义网址（默认用文件名）
 
 已做好 Cloudflare Functions + D1 的留言板后端，放在 `extras/guestbook/`，目前没有接入首页。
 
+## 致谢
+
+英文页面的标题字体：[Instrument Serif](https://github.com/Instrument/instrument-serif)（SIL Open Font License 1.1），自托管在 `public/fonts/`。
+
 ## 许可证
 
 [MIT](LICENSE)
